@@ -1,3 +1,5 @@
+import 'package:estoque_facil/pages/home_page.dart';
+import 'package:estoque_facil/utils/nav.dart';
 import 'package:estoque_facil/widgets/app_button.dart';
 import 'package:estoque_facil/widgets/app_text.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +8,12 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _body(),
+      body: _body(context),
       backgroundColor: Color(0xFF102d3d),
     );
   }
 
-  _body() {
+  _body(context) {
     return ListView(
       padding: EdgeInsets.all(16),
       children: <Widget>[
@@ -57,7 +59,9 @@ class LoginPage extends StatelessWidget {
           ],
         ),
         SizedBox(height: 40),
-        AppButton("Entrar", onPressed: () {}),
+        AppButton("Entrar", onPressed: () {
+          push(context, HomePage(), replace: true);
+        }),
         SizedBox(height: 30),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
