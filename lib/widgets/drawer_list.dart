@@ -1,4 +1,5 @@
 import 'package:estoque_facil/pages/home_page.dart';
+import 'package:estoque_facil/pages/produtos_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,22 @@ class DrawerList extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.home),
               title: Text("Home"),
+              onTap: () {
+                pop(context);
+                push(context, HomePage(), replace: true);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.shopping_cart),
+              title: Text("Produtos"),
+              onTap: () {
+                pop(context);
+                push(context, ProdutosPage(), replace: true);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text("Logout"),
               onTap: () {
                 pop(context);
                 push(context, HomePage(), replace: true);

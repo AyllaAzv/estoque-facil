@@ -8,8 +8,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin<HomePage> {
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-
   TabController _tabController;
 
   @override
@@ -22,7 +20,6 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _drawerKey,
       backgroundColor: Color(0xFFececec),
       appBar: AppBar(
         title: Image.asset(
@@ -39,12 +36,8 @@ class _HomePageState extends State<HomePage>
             onPressed: () {},
           ),
         ],
-        leading: IconButton(
-          icon: Icon(Icons.menu),
+        iconTheme: IconThemeData(
           color: Colors.black,
-          onPressed: () {
-            _drawerKey.currentState.openDrawer();
-          },
         ),
         bottom: TabBar(
           controller: _tabController,
@@ -73,9 +66,10 @@ class _HomePageState extends State<HomePage>
       body: _body(),
       drawerEdgeDragWidth: 0, // THIS WAY IT WILL NOT OPEN
       drawer: DrawerList(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
+        label: Text("Ler Código"),
+        icon: Icon(Icons.chrome_reader_mode),
       ),
     );
   }
