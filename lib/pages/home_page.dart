@@ -6,15 +6,10 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin<HomePage> {
-  TabController _tabController;
-
+class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -39,32 +34,8 @@ class _HomePageState extends State<HomePage>
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(
-              child: Text(
-                "Disponível",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Tab(
-              child: Text(
-                "Acabando",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Tab(
-              child: Text(
-                "Sem estoque",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        ),
       ),
       body: _body(),
-      drawerEdgeDragWidth: 0, // THIS WAY IT WILL NOT OPEN
       drawer: DrawerList(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
@@ -75,13 +46,6 @@ class _HomePageState extends State<HomePage>
   }
 
   _body() {
-    return TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        Container(),
-        Container(),
-        Container(),
-      ],
-    );
+    return Container();
   }
 }
