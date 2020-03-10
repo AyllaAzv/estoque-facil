@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppText extends StatelessWidget {
+class AppTextLogin extends StatelessWidget {
   String label;
   String hint;
   bool password;
@@ -12,7 +12,7 @@ class AppText extends StatelessWidget {
   FocusNode nextFocus;
   Icon icon;
 
-  AppText(
+  AppTextLogin(
     this.label,
     this.hint, {
     this.password = false,
@@ -22,7 +22,7 @@ class AppText extends StatelessWidget {
     this.textInputAction,
     this.focusNode,
     this.nextFocus,
-    this.icon,
+  this.icon
   });
 
   @override
@@ -40,17 +40,26 @@ class AppText extends StatelessWidget {
         }
       },
       style: TextStyle(
+        color: Colors.white,
         fontSize: 25,
       ),
       decoration: InputDecoration(
-        prefixIcon: Padding(padding: EdgeInsets.all(0.0), child: icon),
+        prefixIcon: Padding(
+          padding: EdgeInsets.all(0.0),
+          child: icon // icon is 48px widget.
+        ),
         labelText: label,
         labelStyle: TextStyle(
+          color: Colors.white,
           fontSize: 22,
         ),
         hintText: hint,
         hintStyle: TextStyle(
+          color: Colors.white,
           fontSize: 18,
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
         ),
       ),
     );

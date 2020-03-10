@@ -1,7 +1,7 @@
 import 'package:estoque_facil/pages/home_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
-import 'package:estoque_facil/widgets/app_button.dart';
-import 'package:estoque_facil/widgets/app_text.dart';
+import 'package:estoque_facil/widgets/app_button_login.dart';
+import 'package:estoque_facil/widgets/app_text_login.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
           height: 100,
         ),
         SizedBox(height: 20),
-        AppText(
+        AppTextLogin(
           "E-mail",
           "Digite seu e-mail",
           icon: Icon(
@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        AppText(
+        AppTextLogin(
           "Senha",
           "Digite sua senha",
           password: true,
@@ -59,7 +59,7 @@ class LoginPage extends StatelessWidget {
           ],
         ),
         SizedBox(height: 40),
-        AppButton("Entrar", onPressed: () {
+        AppButtonLogin("Entrar", onPressed: () {
           push(context, HomePage(), replace: true);
         }),
         SizedBox(height: 30),
