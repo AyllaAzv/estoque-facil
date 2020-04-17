@@ -28,6 +28,7 @@ class ProdutoFormPage extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.all(16),
         children: <Widget>[
+          Image.asset("assets/images/sem-imagem.png", height: 200,),
           AppText(
             "Nome",
             "Digite o nome do produto",
@@ -45,7 +46,12 @@ class ProdutoFormPage extends StatelessWidget {
           ),
           AppText(
             "Quantidade Mínima",
-            "Digite a quantidade mínima do produto",
+            "Digite a quantidade máxima do produto",
+            icon: Icon(Icons.filter_9_plus),
+          ),
+          AppText(
+            "Quantidade Mínima",
+            "Digite a quantidade máxima do produto",
             icon: Icon(Icons.filter_9_plus),
           ),
           AppText(
@@ -59,7 +65,7 @@ class ProdutoFormPage extends StatelessWidget {
             icon: Icon(Icons.date_range),
           ),
           SizedBox(height: 30),
-          AppButton("Entrar", onPressed: () {}),
+          AppButton("Cadastrar", onPressed: () {}),
         ],
       ),
     );
