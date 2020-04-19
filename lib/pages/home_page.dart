@@ -1,4 +1,6 @@
 import 'package:estoque_facil/model/Produto.dart';
+import 'package:estoque_facil/pages/produto_page.dart';
+import 'package:estoque_facil/utils/nav.dart';
 import 'package:estoque_facil/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -69,7 +71,7 @@ class _HomePageState extends State<HomePage> {
 
     return GestureDetector(
       onTap: () {
-        //push(context, DogPage(dog));
+        push(context, ProdutoPage(p));
       },
       child: Card(
         color: Colors.grey[100],
@@ -114,7 +116,7 @@ class _HomePageState extends State<HomePage> {
           qtd: 4,
           qtdMinima: 2,
           qtdMaxima: 10,
-          codigo: "123456"),
+          codigo: "123456",),
       Produto(
           id: 1,
           nome: "Asus Max Pro",
