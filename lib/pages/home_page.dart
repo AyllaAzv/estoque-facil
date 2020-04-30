@@ -1,6 +1,8 @@
 import 'package:estoque_facil/model/Produto.dart';
+import 'package:estoque_facil/pages/produto_form.dart';
 import 'package:estoque_facil/pages/produto_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
+import 'package:estoque_facil/widgets/app_text.dart';
 import 'package:estoque_facil/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,11 +31,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            color: Colors.black,
-            onPressed: () {},
-          ),
+          _menu(),
         ],
         iconTheme: IconThemeData(
           color: Colors.black,
@@ -42,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       body: _body(),
       drawer: DrawerList(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: _darBaixa,
         label: Text("Ler Código"),
         icon: Icon(Icons.chrome_reader_mode),
       ),
@@ -90,7 +88,11 @@ class _HomePageState extends State<HomePage> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
               ),
-              Text("Cod: ${p.codigo}", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),),
+              Text(
+                "Cod: ${p.codigo}",
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+              ),
               Text("R\$ ${f.format(p.valor).toString()}")
             ],
           ),
@@ -99,104 +101,170 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _darBaixa() {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            title: Text(
+              "Código escaneado: 7287122173",
+            ),
+            content: AppText(
+              "Quantidade",
+              "Digite a quantidade",
+              icon: Icon(Icons.confirmation_number),
+              keyboardType: TextInputType.number,
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Cancelar"),
+                onPressed: () {
+                  Navigator.pop(context);
+
+                  print("cancelar");
+                },
+              ),
+              FlatButton(
+                child: Text("Dar baixa"),
+                onPressed: () {
+                  Navigator.pop(context);
+
+                  print("Dar baixa");
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   _img(String img) {
     return Image.asset(
       img,
-      height: 100,
+      height: 150
     );
+  }
+
+  _menu() {
+    return PopupMenuButton<String>(
+      onSelected: (String valor) => _onClickPopUpMenu(valor),
+      itemBuilder: (BuildContext context) {
+        return [
+          PopupMenuItem(
+            value: "Cadastrar",
+            child: Text(
+              "Cadastrar Produto",
+            ),
+          ),
+        ];
+      },
+    );
+  }
+
+  _onClickPopUpMenu(String valor) {
+    switch (valor) {
+      case "Cadastrar":
+        push(context, ProdutoFormPage());
+        break;
+    }
   }
 
   _produtos() {
     List<Produto> produtos = [
       Produto(
-          id: 1,
-          nome: "Galaxy A20",
-          imagem: "assets/images/a20.png",
-          valor: 800.56,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
-          codigo: "123456",),
+        id: 1,
+        nome: "Galaxy A20",
+        imagem: "assets/images/a20.png",
+        valor: 800.56,
+        quantidade: 4,
+        quantidadeMinima: 2,
+        quantidadeMaxima: 10,
+        codigo: "123456",
+      ),
       Produto(
           id: 1,
           nome: "Asus Max Pro",
           imagem: "assets/images/asus-max-pro.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "Iphone 8",
           imagem: "assets/images/iphone-8.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "Iphone 11",
           imagem: "assets/images/Iphone-11.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "Galaxy J6",
           imagem: "assets/images/J6.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "Mogo G7",
           imagem: "assets/images/moto-g7.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "Moto G8",
           imagem: "assets/images/moto-g8.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "GMoto One",
           imagem: "assets/images/Moto-one.png",
           valor: 1500.00,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "Galaxy S10",
           imagem: "assets/images/s10.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456"),
       Produto(
           id: 1,
           nome: "Xiaomi Note 8",
           imagem: "assets/images/Xiaomi-Note-8.png",
           valor: 800.0,
-          qtd: 4,
-          qtdMinima: 2,
-          qtdMaxima: 10,
+          quantidade: 4,
+          quantidadeMinima: 2,
+          quantidadeMaxima: 10,
           codigo: "123456")
     ];
 

@@ -3,24 +3,26 @@ class Produto {
   String nome;
   String imagem;
   String codigo;
-  int qtd;
-  int qtdMinima;
-  int qtdMaxima;
+  int quantidade;
+  int quantidadeMinima;
+  int quantidadeMaxima;
   String validade;
   double valor;
   String dataCadastro;
+  int idUsuario;
 
   Produto({
     this.id,
     this.nome,
     this.imagem,
     this.codigo,
-    this.qtd,
-    this.qtdMinima,
-    this.qtdMaxima,
+    this.quantidade,
+    this.quantidadeMinima,
+    this.quantidadeMaxima,
     this.validade,
     this.valor,
     this.dataCadastro,
+    this.idUsuario,
   });
 
     Produto.fromMap(Map<String, dynamic> map) {
@@ -28,12 +30,13 @@ class Produto {
     nome = map['nome'];
     imagem = map['imagem'];
     codigo = map['codigo'];
-    qtd = map['qtd'];
-    qtdMinima = map['qtdMinima'];
-    qtdMaxima = map['qtdMaxima'];
+    quantidade = map['quantidade'];
+    quantidadeMinima = map['quantidadeMinima'];
+    quantidadeMaxima = map['quantidadeMaxima'];
     validade = map['validade'];
     valor = map['valor'];
     dataCadastro = map['dataCadastro'];
+    idUsuario = map['idUsuario'];
   }
 
   Map<String, dynamic> toMap() {
@@ -42,12 +45,13 @@ class Produto {
     data['nome'] = this.nome;
     data['imagem'] = this.imagem;
     data['codigo'] = this.codigo;
-    data['qtd'] = this.qtd;
-    data['qtdMinima'] = this.qtdMinima;
-    data['qtdMaxima'] = this.qtdMaxima;
+    data['quantidade'] = this.quantidade;
+    data['quantidadeMinima'] = this.quantidadeMinima;
+    data['quantidadeMaxima'] = this.quantidadeMaxima;
     data['validade'] = this.validade;
     data['valor'] = this.valor;
     data['dataCadastro'] = this.dataCadastro;
+    data['idUsuario'] = this.idUsuario;
     return data;
   }
 }

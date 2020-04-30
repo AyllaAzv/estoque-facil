@@ -40,17 +40,17 @@ class AppText extends StatelessWidget {
         }
       },
       style: TextStyle(
-        fontSize: 25,
+        fontSize: 18,
       ),
       decoration: InputDecoration(
         prefixIcon: Padding(padding: EdgeInsets.all(0.0), child: icon),
         labelText: label,
         labelStyle: TextStyle(
-          fontSize: 22,
+          fontSize: 20,
         ),
         hintText: hint,
         hintStyle: TextStyle(
-          fontSize: 18,
+          fontSize: 17,
         ),
       ),
     );

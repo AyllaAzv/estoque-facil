@@ -15,7 +15,7 @@ class DrawerList extends StatelessWidget {
               color: Color(0xFF102d3d),
               padding: EdgeInsets.all(15),
               child: Center(
-                child: Image.asset("assets/images/logo.png"),
+                child: Image.asset("assets/images/logo.png", height: 50,),
               ),
             ),
             ListTile(

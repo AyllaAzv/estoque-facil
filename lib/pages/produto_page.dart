@@ -1,7 +1,7 @@
 import 'package:estoque_facil/model/Produto.dart';
-import 'package:estoque_facil/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 class ProdutoPage extends StatelessWidget {
   Produto produto;
@@ -87,7 +87,7 @@ class ProdutoPage extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
         ),
         subtitle: Text(
-          produto.qtd.toString(),
+          produto.quantidade.toString(),
           style: TextStyle(fontSize: 17),
         ),
       ),
@@ -102,7 +102,7 @@ class ProdutoPage extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
         ),
         subtitle: Text(
-          produto.qtdMaxima.toString(),
+          produto.quantidadeMaxima.toString(),
           style: TextStyle(fontSize: 17),
         ),
       ),
@@ -117,7 +117,7 @@ class ProdutoPage extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
         ),
         subtitle: Text(
-          produto.qtdMinima.toString(),
+          produto.quantidadeMinima.toString(),
           style: TextStyle(fontSize: 17),
         ),
       ),
@@ -191,8 +191,12 @@ class ProdutoPage extends StatelessWidget {
         print("deletar");
         break;
       case "Compartilhar":
-        print("Clicou em compartilhar!");
+        _onClickCompartilhar();
         break;
     }
+  }
+
+  _onClickCompartilhar() {
+    Share.share(produto.nome);
   }
 }
