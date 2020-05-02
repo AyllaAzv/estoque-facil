@@ -1,10 +1,12 @@
-import 'package:estoque_facil/model/Produto.dart';
+import 'package:estoque_facil/controllers/produto_model.dart';
+import 'package:estoque_facil/models/Produto.dart';
 import 'package:estoque_facil/pages/produto_form.dart';
 import 'package:estoque_facil/pages/produto_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
 import 'package:estoque_facil/widgets/app_text.dart';
 import 'package:estoque_facil/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,9 +15,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _model = ProdutoModel();
+
   @override
   void initState() {
     super.initState();
+
+    _model.fetch();
   }
 
   @override
@@ -48,16 +54,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   _body() {
+    return Observer(builder: (_) {
+      List<Produto> produtos = _model.produtos;
+
+      if (_model.error != null) {
+        return Center(
+          child: Text(
+            "Erro ao carregar produtos.",
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        );
+      }
+
+      if (produtos == null) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      return _gridView(produtos);
+    });
+  }
+
+  _gridView(List<Produto> produtos) {
     return GridView.builder(
       padding: EdgeInsets.all(16),
-      itemCount: _produtos().length,
+      itemCount: produtos.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: MediaQuery.of(context).size.width /
             (MediaQuery.of(context).size.height / 1.5),
       ),
       itemBuilder: (context, index) {
-        return _itemView(_produtos(), index);
+        return _itemView(produtos, index);
       },
     );
   }
@@ -143,10 +175,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _img(String img) {
-    return Image.asset(
-      img,
-      height: 150
-    );
+    return Image.network(img, height: MediaQuery.of(context).size.height / 6);
   }
 
   _menu() {
@@ -171,103 +200,5 @@ class _HomePageState extends State<HomePage> {
         push(context, ProdutoFormPage());
         break;
     }
-  }
-
-  _produtos() {
-    List<Produto> produtos = [
-      Produto(
-        id: 1,
-        nome: "Galaxy A20",
-        imagem: "assets/images/a20.png",
-        valor: 800.56,
-        quantidade: 4,
-        quantidadeMinima: 2,
-        quantidadeMaxima: 10,
-        codigo: "123456",
-      ),
-      Produto(
-          id: 1,
-          nome: "Asus Max Pro",
-          imagem: "assets/images/asus-max-pro.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "Iphone 8",
-          imagem: "assets/images/iphone-8.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "Iphone 11",
-          imagem: "assets/images/Iphone-11.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "Galaxy J6",
-          imagem: "assets/images/J6.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "Mogo G7",
-          imagem: "assets/images/moto-g7.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "Moto G8",
-          imagem: "assets/images/moto-g8.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "GMoto One",
-          imagem: "assets/images/Moto-one.png",
-          valor: 1500.00,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "Galaxy S10",
-          imagem: "assets/images/s10.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456"),
-      Produto(
-          id: 1,
-          nome: "Xiaomi Note 8",
-          imagem: "assets/images/Xiaomi-Note-8.png",
-          valor: 800.0,
-          quantidade: 4,
-          quantidadeMinima: 2,
-          quantidadeMaxima: 10,
-          codigo: "123456")
-    ];
-
-    return produtos;
   }
 }

@@ -22,4 +22,14 @@ class Usuario {
     data['senha'] = this.senha;
     return data;
   }
+
+  static Future<Usuario> get() async {
+    Usuario usuario = Usuario();
+
+    usuario.id = 1;
+    usuario.usuario = "ayllaazv";
+    usuario.senha = "123";
+
+    return usuario;
+  }
 }

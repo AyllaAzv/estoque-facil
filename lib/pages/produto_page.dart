@@ -1,4 +1,4 @@
-import 'package:estoque_facil/model/Produto.dart';
+import 'package:estoque_facil/models/Produto.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
@@ -29,7 +29,7 @@ class ProdutoPage extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(60),
-                    child: Image.asset(produto.imagem),
+                    child: Image.network(produto.imagem),
                   ),
                   const DecoratedBox(
                     decoration: BoxDecoration(

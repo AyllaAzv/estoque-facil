@@ -9,7 +9,7 @@ class Produto {
   String validade;
   double valor;
   String dataCadastro;
-  int idUsuario;
+  int usuario_id;
 
   Produto({
     this.id,
@@ -22,7 +22,7 @@ class Produto {
     this.validade,
     this.valor,
     this.dataCadastro,
-    this.idUsuario,
+    this.usuario_id,
   });
 
     Produto.fromMap(Map<String, dynamic> map) {
@@ -36,7 +36,7 @@ class Produto {
     validade = map['validade'];
     valor = map['valor'];
     dataCadastro = map['dataCadastro'];
-    idUsuario = map['idUsuario'];
+    usuario_id = map['usuario_id'];
   }
 
   Map<String, dynamic> toMap() {
@@ -51,7 +51,7 @@ class Produto {
     data['validade'] = this.validade;
     data['valor'] = this.valor;
     data['dataCadastro'] = this.dataCadastro;
-    data['idUsuario'] = this.idUsuario;
+    data['usuario_id'] = this.usuario_id;
     return data;
   }
 }
