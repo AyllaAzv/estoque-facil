@@ -1,3 +1,7 @@
+import 'dart:convert' as convert;
+
+import 'package:estoque_facil/utils/prefs.dart';
+
 class Usuario {
   int id;
   String usuario;
@@ -23,13 +27,27 @@ class Usuario {
     return data;
   }
 
+  static void clear() {
+    Prefs.setString("user.prefs", "");
+  }
+
+  void save() {
+    Map map = toMap();
+
+    String json = convert.json.encode(map);
+
+    Prefs.setString("user.prefs", json);
+  }
+
   static Future<Usuario> get() async {
-    Usuario usuario = Usuario();
+    String json = await Prefs.getString("user.prefs");
 
-    usuario.id = 1;
-    usuario.usuario = "ayllaazv";
-    usuario.senha = "123";
+    if (json.isEmpty) {
+      return null;
+    }
 
-    return usuario;
+    Map map = convert.json.decode(json);
+
+    return Usuario.fromMap(map);
   }
 }

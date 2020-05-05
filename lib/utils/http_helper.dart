@@ -1,4 +1,4 @@
-import 'package:estoque_facil/models/Usuario.dart';
+import 'package:estoque_facil/models/usuario.dart';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> get(String url) async {

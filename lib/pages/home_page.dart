@@ -1,5 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estoque_facil/controllers/produto_model.dart';
-import 'package:estoque_facil/models/Produto.dart';
+import 'package:estoque_facil/models/produto.dart';
 import 'package:estoque_facil/pages/produto_form.dart';
 import 'package:estoque_facil/pages/produto_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
@@ -8,6 +9,7 @@ import 'package:estoque_facil/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -75,7 +77,10 @@ class _HomePageState extends State<HomePage> {
         );
       }
 
-      return _gridView(produtos);
+      return RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: _gridView(produtos),
+      );
     });
   }
 
@@ -103,6 +108,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         push(context, ProdutoPage(p));
       },
+      onLongPress: () => _onLongClickProduto(context, p),
       child: Card(
         color: Colors.grey[100],
         child: Container(
@@ -115,7 +121,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 5),
               Text(
-                p.nome,
+                p.nome.toUpperCase(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
@@ -141,8 +147,12 @@ class _HomePageState extends State<HomePage> {
         return WillPopScope(
           onWillPop: () async => false,
           child: AlertDialog(
-            title: Text(
-              "Código escaneado: 7287122173",
+            title: Column(
+              children: <Widget>[
+                Image.asset("assets/images/logo_estoque.png", height: 50),
+                SizedBox(height: 20),
+                Text("Cod: 372648271"),
+              ],
             ),
             content: AppText(
               "Quantidade",
@@ -175,7 +185,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   _img(String img) {
-    return Image.network(img, height: MediaQuery.of(context).size.height / 6);
+    return CachedNetworkImage(
+      imageUrl: img ??
+          "https://firebasestorage.googleapis.com/v0/b/estoque-facil-b0b71.appspot.com/o/Fotos%20Celulares%2FGoogle%20Pixel.png?alt=media&token=19912a9e-796f-446f-9173-65ccd1c3fe96",
+      height: MediaQuery.of(context).size.height / 6,
+    );
   }
 
   _menu() {
@@ -200,5 +214,54 @@ class _HomePageState extends State<HomePage> {
         push(context, ProdutoFormPage());
         break;
     }
+  }
+
+  _onLongClickProduto(BuildContext context, Produto produto) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 5),
+              child: Text(
+                produto.nome,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text("Detalhes"),
+              leading: Icon(
+                Icons.shopping_basket,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                push(context, ProdutoPage(produto));
+              },
+            ),
+            ListTile(
+              title: Text("Compartilhar"),
+              leading: Icon(Icons.share),
+              onTap: () {
+                Navigator.pop(context);
+                _onClickCompartilhar(produto);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _onClickCompartilhar(Produto produto) {
+    Share.share(produto.nome);
+  }
+
+  Future<void> _onRefresh() {
+    return _model.fetch();
   }
 }

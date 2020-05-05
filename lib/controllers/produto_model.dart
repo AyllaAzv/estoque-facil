@@ -1,4 +1,4 @@
-import 'package:estoque_facil/models/Produto.dart';
+import 'package:estoque_facil/models/produto.dart';
 import 'package:estoque_facil/services/produto_service.dart';
 import 'package:mobx/mobx.dart';
 
@@ -19,8 +19,6 @@ abstract class ProdutoModelBase with Store {
     try {
       this.produtos = await ProdutoService.getProdutos();
     } catch(e) {
-      print(e);
-      print(e);
       this.error = e;
     }
   }

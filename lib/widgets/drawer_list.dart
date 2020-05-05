@@ -1,4 +1,6 @@
+import 'package:estoque_facil/models/usuario.dart';
 import 'package:estoque_facil/pages/home_page.dart';
+import 'package:estoque_facil/pages/login_page.dart';
 import 'package:estoque_facil/pages/produtos_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,10 @@ class DrawerList extends StatelessWidget {
               color: Color(0xFF102d3d),
               padding: EdgeInsets.all(15),
               child: Center(
-                child: Image.asset("assets/images/logo.png", height: 50,),
+                child: Image.asset(
+                  "assets/images/logo.png",
+                  height: 50,
+                ),
               ),
             ),
             ListTile(
@@ -38,13 +43,18 @@ class DrawerList extends StatelessWidget {
               leading: Icon(Icons.exit_to_app),
               title: Text("Logout"),
               onTap: () {
-                pop(context);
-                push(context, HomePage(), replace: true);
+                _onClickLogout(context);
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  _onClickLogout(context) {
+    Usuario.clear();
+    Navigator.pop(context);
+    push(context, LoginPage(), replace: true);
   }
 }

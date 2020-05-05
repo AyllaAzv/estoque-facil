@@ -34,7 +34,7 @@ class Produto {
     quantidadeMinima = map['quantidadeMinima'];
     quantidadeMaxima = map['quantidadeMaxima'];
     validade = map['validade'];
-    valor = map['valor'];
+    valor = (map['valor'] as num).toDouble();
     dataCadastro = map['dataCadastro'];
     usuario_id = map['usuario_id'];
   }
