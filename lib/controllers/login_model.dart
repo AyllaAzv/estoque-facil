@@ -7,7 +7,6 @@ part 'login_model.g.dart';
 class LoginModel = LoginModelBase with _$LoginModel;
 
 abstract class LoginModelBase with Store {
-
   @observable
   ApiResponse response;
 
@@ -18,7 +17,7 @@ abstract class LoginModelBase with Store {
   login(String usuario, String senha) async {
     try {
       response = await UsuarioService.login(usuario, senha);
-    } catch(e) {
+    } catch (e) {
       this.error = e;
     }
   }

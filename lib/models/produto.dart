@@ -1,3 +1,5 @@
+import 'dart:convert' as convert;
+
 class Produto {
   int id;
   String nome;
@@ -53,5 +55,10 @@ class Produto {
     data['dataCadastro'] = this.dataCadastro;
     data['usuario_id'] = this.usuario_id;
     return data;
+  }
+
+  String toJson() {
+    String json = convert.json.encode(toMap());
+    return json;
   }
 }

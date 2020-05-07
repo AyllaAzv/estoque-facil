@@ -1,3 +1,5 @@
+import 'package:estoque_facil/models/usuario.dart';
+import 'package:estoque_facil/pages/home_page.dart';
 import 'package:estoque_facil/pages/login_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +18,15 @@ class _SplashPageState extends State<SplashPage> {
 
     Future futureB = Future.delayed(Duration(seconds: 3));
 
-    Future.wait([futureB]).then((List values) {
-      push(context, LoginPage(), replace: true);
+    Future<Usuario> futureC = Usuario.get();
+
+    Future.wait([futureB, futureC]).then((List values) {
+      Usuario user = values[1];
+      if (user != null) {
+        push(context, HomePage(), replace: true);
+      } else {
+        push(context, LoginPage());
+      }
     });
   }
 
@@ -26,7 +35,9 @@ class _SplashPageState extends State<SplashPage> {
     return Container(
       color: Color(0xFF23acbc),
       child: Center(
-        child: CircularProgressIndicator(backgroundColor: Colors.white,),
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+        ),
       ),
     );
   }

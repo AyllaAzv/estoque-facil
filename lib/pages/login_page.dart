@@ -1,6 +1,7 @@
 import 'package:estoque_facil/controllers/login_model.dart';
 import 'package:estoque_facil/models/api_response.dart';
 import 'package:estoque_facil/models/usuario.dart';
+import 'package:estoque_facil/pages/cadastro_form_page.dart';
 import 'package:estoque_facil/pages/home_page.dart';
 import 'package:estoque_facil/utils/alert.dart';
 import 'package:estoque_facil/utils/nav.dart';
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               InkWell(
-                onTap: () {},
+                onTap: _onClickCadastro,
                 child: Text(
                   "Não tem cadastro?",
                   style: TextStyle(
@@ -158,5 +159,9 @@ class _LoginPageState extends State<LoginPage> {
       return "A senha deve ter pelo menos três números";
     }
     return null;
+  }
+
+  _onClickCadastro() async {
+    push(context, CadastroFormPage());
   }
 }

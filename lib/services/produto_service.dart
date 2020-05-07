@@ -22,6 +22,26 @@ class ProdutoService {
     return produtos;
   }
 
+  static Future<ApiResponse> saveProduto(Produto produto) async {
+    try {
+      var url = "$BASE_URL/usuario";
+
+      String json = produto.toJson();
+
+      var response = await post(url, body: json);
+
+      if (response.statusCode == 200) {
+        return ApiResponse.ok(msg: "Produto salvo com sucesso.");
+      }
+
+      return ApiResponse.error(msg: "Não foi possível salvar o produto.");
+    } catch (e) {
+      print(e);
+
+      return ApiResponse.error(msg: "Não foi possível salvar o produto.");
+    }
+  }
+
   static Future<ApiResponse<bool>> deleteProduto(Produto p) async {
     try {
       var url = "$BASE_URL/produto/${p.id}";
