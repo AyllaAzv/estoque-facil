@@ -1,10 +1,16 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estoque_facil/models/produto.dart';
+import 'package:estoque_facil/pages/home_page.dart';
+import 'package:estoque_facil/services/produto_service.dart';
+import 'package:estoque_facil/utils/alert.dart';
+import 'package:estoque_facil/utils/nav.dart';
 import 'package:estoque_facil/widgets/app_button.dart';
 import 'package:estoque_facil/widgets/app_datepiker.dart';
 import 'package:estoque_facil/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class ProdutoFormPage extends StatefulWidget {
   Produto produto;
@@ -22,7 +28,7 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
   final _tQuantidade = TextEditingController();
   final _tQuantidadeMinima = TextEditingController();
   final _tQuantidadeMaxima = TextEditingController();
-  final _tValor = TextEditingController();
+  final _tValor = MoneyMaskedTextController(precision: 2, leftSymbol: 'R\$ ', decimalSeparator: ',', thousandSeparator: '.');
   final _tValidade = TextEditingController();
 
   File _file;
@@ -33,13 +39,14 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
   void initState() {
     super.initState();
 
-    if(produto != null) {
+    if (produto != null) {
       _tNome.text = produto.nome;
       _tCodigo.text = produto.codigo;
       _tQuantidade.text = produto.quantidade.toString();
       _tQuantidadeMinima.text = produto.quantidadeMinima.toString();
+      _tQuantidadeMaxima.text = produto.quantidadeMaxima.toString();
       _tValor.text = produto.valor.toString();
-      _tValor.text = produto.validade;
+      _tValidade.text = produto.validade;
     }
   }
 
@@ -52,7 +59,7 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
-          produto.nome ?? "Novo Produto",
+          produto != null ? produto.nome : "Novo Produto",
           style: TextStyle(color: Colors.black),
         ),
         iconTheme: IconThemeData(
@@ -78,12 +85,14 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
             "Digite o nome do produto",
             icon: Icon(Icons.add_box),
             controller: _tNome,
+            validator: _validateNome,
           ),
           AppText(
             "Código",
             "Digite o código do produto",
             icon: Icon(Icons.confirmation_number),
             controller: _tCodigo,
+            validator: _validateCodigo,
           ),
           AppText(
             "Quantidade",
@@ -91,20 +100,23 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
             icon: Icon(Icons.filter_5),
             keyboardType: TextInputType.number,
             controller: _tQuantidade,
+            validator: _validateQuantidade,
           ),
           AppText(
             "Quantidade Mínima",
-            "Digite a quantidade máxima do produto",
+            "Digite a quantidade mínima do produto",
             icon: Icon(Icons.filter_9_plus),
             keyboardType: TextInputType.number,
             controller: _tQuantidadeMinima,
+            validator: _validateQuantidadeMinima,
           ),
           AppText(
-            "Quantidade Mínima",
+            "Quantidade Máxima",
             "Digite a quantidade máxima do produto",
             icon: Icon(Icons.filter_9_plus),
             keyboardType: TextInputType.number,
             controller: _tQuantidadeMaxima,
+            validator: _validateQuantidadeMaxima,
           ),
           AppText(
             "Valor",
@@ -112,15 +124,19 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
             icon: Icon(Icons.monetization_on),
             keyboardType: TextInputType.number,
             controller: _tValor,
+            validator: _validateValor,
           ),
           AppTextDatePiker(
             "Validade",
             "Digite a validade",
             Icon(Icons.date_range),
             controller: _tValidade,
+            validator: _validateValidade,
           ),
           SizedBox(height: 30),
-          AppButton("Cadastrar", onPressed: _onClickCadastrar),
+          AppButton("Salvar",
+              onPressed:
+                  produto == null ? _onClickCadastrar : _onClickAtualizar),
         ],
       ),
     );
@@ -135,10 +151,15 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
               height: 200,
               fit: BoxFit.cover,
             )
-          : Image.asset(
-              "assets/images/sem-imagem.png",
-              height: 200,
-            ),
+          : produto != null
+              ? CachedNetworkImage(
+                  imageUrl: produto.imagem,
+                  height: 200,
+                )
+              : Image.asset(
+                  "assets/images/sem-imagem.png",
+                  height: 200,
+                ),
     );
   }
 
@@ -153,8 +174,123 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
     }
   }
 
-  _onClickCadastrar() {
+  _onClickCadastrar() async {
+    bool formOk = _formKey.currentState.validate();
+
+    if (!formOk) {
+      return;
+    }
+
     var data = DateTime.now();
+
+    Produto p = Produto(
+      nome: _tNome.text,
+      codigo: _tCodigo.text,
+      quantidade: int.parse(_tQuantidade.text),
+      quantidadeMinima: int.parse(_tQuantidadeMinima.text),
+      quantidadeMaxima: int.parse(_tQuantidadeMaxima.text),
+      valor: _tValor.numberValue,
+      validade: _tValidade.text,
+      dataCadastro: data.toString(),
+    );
+
+    final response = await ProdutoService.saveProduto(p);
+
+    if (response.ok) {
+      alert(context, response.msg, callback: () {
+        push(context, HomePage(), replace: true);
+      });
+    } else {
+      alert(context, response.msg);
+    }
   }
 
+  _onClickAtualizar() async {
+    bool formOk = _formKey.currentState.validate();
+
+    if (!formOk) {
+      return;
+    }
+
+    Produto p = Produto(
+      id: produto.id,
+      nome: _tNome.text,
+      codigo: _tCodigo.text,
+      quantidade: int.parse(_tQuantidade.text),
+      quantidadeMinima: int.parse(_tQuantidadeMinima.text),
+      quantidadeMaxima: int.parse(_tQuantidadeMaxima.text),
+      valor: _tValor.numberValue,
+      validade: _tValidade.text,
+      imagem: produto.imagem,
+    );
+
+    final response = await ProdutoService.updateProduto(p);
+
+    if (response.ok) {
+      alert(context, response.msg, callback: () {
+        push(context, HomePage(), replace: true);
+      });
+    } else {
+      alert(context, response.msg);
+    }
+  }
+
+  String _validateNome(String text) {
+    if (text.isEmpty) {
+      return "Digite o nome do produto";
+    }
+
+    if (text.length < 3) {
+      return "Nome deve ter pelo menos 3 letras";
+    }
+    return null;
+  }
+
+  String _validateCodigo(String text) {
+    if (text.isEmpty) {
+      return "Digite o código do produto";
+    }
+
+    return null;
+  }
+
+  String _validateQuantidade(String text) {
+    if (text.isEmpty) {
+      return "Digite a quantidade";
+    }
+
+    return null;
+  }
+
+  String _validateQuantidadeMinima(String text) {
+    if (text.isEmpty) {
+      return "Digite a quantidade mínima";
+    }
+
+    return null;
+  }
+
+  String _validateQuantidadeMaxima(String text) {
+    if (text.isEmpty) {
+      return "Digite a quantidade máxima";
+    }
+
+    return null;
+  }
+
+  String _validateValor(String text) {
+    if (text.isEmpty) {
+      return "Digite o valor";
+    }
+
+    return null;
+  }
+
+  String _validateValidade(DateTime data) {
+    if (data == null) {
+      return "Digite a validade";
+    }
+
+    return null;
+  }
 }

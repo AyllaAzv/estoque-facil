@@ -2,7 +2,6 @@ import 'package:estoque_facil/models/usuario.dart';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> get(String url) async {
-  print(url);
   final headers = await _headers();
   var response = await http.get(url, headers: headers);
   return response;
@@ -11,6 +10,7 @@ Future<http.Response> get(String url) async {
 Future<http.Response> post(String url, {body}) async {
   final headers = await _headers();
   var response = await http.post(url, body: body, headers: headers);
+  print(response.body);
   return response;
 }
 

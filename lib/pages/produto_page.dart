@@ -208,7 +208,7 @@ class _ProdutoPageState extends State<ProdutoPage> {
   _onClickPopUpMenu(String valor) {
     switch (valor) {
       case "Editar":
-        push(context, ProdutoFormPage());
+        push(context, ProdutoFormPage(produto: produto));
         break;
       case "Deletar":
         _onClickDeletar();

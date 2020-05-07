@@ -24,7 +24,9 @@ class ProdutoService {
 
   static Future<ApiResponse> saveProduto(Produto produto) async {
     try {
-      var url = "$BASE_URL/usuario";
+      var url = "$BASE_URL/produto";
+
+      produto.imagem = "https://firebasestorage.googleapis.com/v0/b/estoque-facil-b0b71.appspot.com/o/Fotos%20Celulares%2Fa20.png?alt=media&token=17aaf1dc-c81b-4446-92f1-cee6c93c1f9a";
 
       String json = produto.toJson();
 
@@ -39,6 +41,29 @@ class ProdutoService {
       print(e);
 
       return ApiResponse.error(msg: "Não foi possível salvar o produto.");
+    }
+  }
+
+
+  static Future<ApiResponse> updateProduto(Produto produto) async {
+    try {
+      var url = "$BASE_URL/produto/${produto.id}";
+
+      String json = produto.toJson();
+
+      var response = await put(url, body: json);
+      print(json);
+      print(response.body);
+
+      if (response.statusCode == 204) {
+        return ApiResponse.ok(msg: "Produto atualizado com sucesso.");
+      }
+
+      return ApiResponse.error(msg: "Não foi possível atualizar o produto.");
+    } catch (e) {
+      print(e);
+
+      return ApiResponse.error(msg: "Não foi possível atualizar o produto.");
     }
   }
 
