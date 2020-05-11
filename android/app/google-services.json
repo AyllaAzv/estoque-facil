@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "912557172144",
+    "firebase_url": "https://estoque-facil-b0b71.firebaseio.com",
+    "project_id": "estoque-facil-b0b71",
+    "storage_bucket": "estoque-facil-b0b71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912557172144:android:915b155857eb62be2ae275",
+        "android_client_info": {
+          "package_name": "com.example.estoque_facil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912557172144-3ue44fgnu56b2jlo8ku046ho2mmkcfem.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.estoque_facil",
+            "certificate_hash": "417ad9bc0fb897bd542044f521f67036179db57d"
+          }
+        },
+        {
+          "client_id": "912557172144-fpc0frpqu9rkjnis79u4ldpqqolhroi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClwZnjyvxTc-Q4jai4t8q_L4P377iiXuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912557172144-fpc0frpqu9rkjnis79u4ldpqqolhroi6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

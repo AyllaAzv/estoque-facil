@@ -10,7 +10,6 @@ Future<http.Response> get(String url) async {
 Future<http.Response> post(String url, {body}) async {
   final headers = await _headers();
   var response = await http.post(url, body: body, headers: headers);
-  print(response.body);
   return response;
 }
 

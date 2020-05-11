@@ -20,6 +20,8 @@ class _CadastroFormPageState extends State<CadastroFormPage> {
 
   final _tConfirmacaoSenha = TextEditingController();
 
+  var _showProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +74,7 @@ class _CadastroFormPageState extends State<CadastroFormPage> {
           SizedBox(height: 30),
           AppButton(
             "Criar Conta",
+            showProgress: _showProgress,
             onPressed: _onClickCadastro,
           ),
         ],
@@ -86,6 +89,10 @@ class _CadastroFormPageState extends State<CadastroFormPage> {
       return;
     }
 
+    setState(() {
+      _showProgress = true;
+    });
+
     String usuario = _tUsuario.text;
     String senha = _tSenha.text;
     String confirmacaoSenha = _tConfirmacaoSenha.text;
@@ -96,6 +103,10 @@ class _CadastroFormPageState extends State<CadastroFormPage> {
     }
 
     final response = await UsuarioService.cadastrar(usuario, senha);
+
+    setState(() {
+      _showProgress = false;
+    });
 
     if (response.ok) {
       push(context, LoginPage(), replace: true);

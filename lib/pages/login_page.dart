@@ -25,6 +25,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final _model = LoginModel();
 
+  var _showProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           SizedBox(height: 40),
-          AppButtonLogin("Entrar", onPressed: _onClickLogin),
+          AppButtonLogin("Entrar", showProgress: _showProgress, onPressed: _onClickLogin),
           SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,13 +129,21 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    setState(() {
+      _showProgress = true;
+    });
+
     String usuario = _tUsuario.text;
     String senha = _tSenha.text;
 
     await _model.login(usuario, senha);
 
     ApiResponse response = _model.response;
-  print(response.ok);
+
+    setState(() {
+      _showProgress = false;
+    });
+
     if (response.ok) {
       Usuario user = response.result;
       print(">>> ${user.usuario}");

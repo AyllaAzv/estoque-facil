@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'package:estoque_facil/models/api_response.dart';
 import 'package:estoque_facil/models/produto.dart';
+import 'package:estoque_facil/services/firebase_service.dart';
 import 'dart:convert' as convert;
-
 import 'package:estoque_facil/utils/http_helper.dart';
 
 class ProdutoService {
@@ -22,11 +23,38 @@ class ProdutoService {
     return produtos;
   }
 
-  static Future<ApiResponse> saveProduto(Produto produto) async {
+  static Future<ApiResponse<Produto>> getByCodigo(String codigo) async {
+    try {
+      var url = '$BASE_URL/produto/$codigo';
+
+      var response = await get(url);
+
+      Map responseMap = convert.json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        Produto produto = Produto.fromMap(responseMap);
+
+        return ApiResponse.ok(result: produto);
+      }
+
+      return ApiResponse.error(msg: responseMap["error"]);
+    } catch (error, exception) {
+      print("Erro no busca produto $error > $exception");
+
+      return ApiResponse.error(msg: "Não foi possível buscar produto.");
+    }
+  }
+
+  static Future<ApiResponse> saveProduto(Produto produto, File file) async {
     try {
       var url = "$BASE_URL/produto";
 
-      produto.imagem = "https://firebasestorage.googleapis.com/v0/b/estoque-facil-b0b71.appspot.com/o/Fotos%20Celulares%2Fa20.png?alt=media&token=17aaf1dc-c81b-4446-92f1-cee6c93c1f9a";
+      if (file != null) {
+        produto.imagem = await FirebaseService.uploadFirebaseStorage(file);
+      } else {
+        produto.imagem =
+            "https://firebasestorage.googleapis.com/v0/b/estoque-facil-b0b71.appspot.com/o/Fotos%20Celulares%2Fa20.png?alt=media&token=17aaf1dc-c81b-4446-92f1-cee6c93c1f9a";
+      }
 
       String json = produto.toJson();
 
@@ -44,16 +72,17 @@ class ProdutoService {
     }
   }
 
-
-  static Future<ApiResponse> updateProduto(Produto produto) async {
+  static Future<ApiResponse> updateProduto(Produto produto, {File file}) async {
     try {
       var url = "$BASE_URL/produto/${produto.id}";
+
+      if (file != null) {
+        produto.imagem = await FirebaseService.uploadFirebaseStorage(file);
+      }
 
       String json = produto.toJson();
 
       var response = await put(url, body: json);
-      print(json);
-      print(response.body);
 
       if (response.statusCode == 204) {
         return ApiResponse.ok(msg: "Produto atualizado com sucesso.");

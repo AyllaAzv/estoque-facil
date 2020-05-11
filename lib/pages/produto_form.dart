@@ -28,10 +28,17 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
   final _tQuantidade = TextEditingController();
   final _tQuantidadeMinima = TextEditingController();
   final _tQuantidadeMaxima = TextEditingController();
-  final _tValor = MoneyMaskedTextController(precision: 2, leftSymbol: 'R\$ ', decimalSeparator: ',', thousandSeparator: '.');
+  final _tValor = MoneyMaskedTextController(
+      precision: 2,
+      leftSymbol: 'R\$ ',
+      decimalSeparator: ',',
+      thousandSeparator: '.');
   final _tValidade = TextEditingController();
 
   File _file;
+  String _urlFoto;
+
+  var _showProgress = false;
 
   Produto get produto => widget.produto;
 
@@ -47,6 +54,7 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
       _tQuantidadeMaxima.text = produto.quantidadeMaxima.toString();
       _tValor.text = produto.valor.toString();
       _tValidade.text = produto.validade;
+      _urlFoto = produto.imagem;
     }
   }
 
@@ -134,9 +142,11 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
             validator: _validateValidade,
           ),
           SizedBox(height: 30),
-          AppButton("Salvar",
-              onPressed:
-                  produto == null ? _onClickCadastrar : _onClickAtualizar),
+          AppButton(
+            "Salvar",
+            showProgress: _showProgress,
+            onPressed: produto == null ? _onClickCadastrar : _onClickAtualizar,
+          ),
         ],
       ),
     );
@@ -167,7 +177,6 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
     File file = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     if (file != null) {
-      print(file);
       setState(() {
         _file = file;
       });
@@ -180,6 +189,10 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
     if (!formOk) {
       return;
     }
+
+    setState(() {
+      _showProgress = true;
+    });
 
     var data = DateTime.now();
 
@@ -194,7 +207,11 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
       dataCadastro: data.toString(),
     );
 
-    final response = await ProdutoService.saveProduto(p);
+    final response = await ProdutoService.saveProduto(p, _file);
+
+    setState(() {
+      _showProgress = false;
+    });
 
     if (response.ok) {
       alert(context, response.msg, callback: () {
@@ -212,6 +229,10 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
       return;
     }
 
+    setState(() {
+      _showProgress = true;
+    });
+
     Produto p = Produto(
       id: produto.id,
       nome: _tNome.text,
@@ -221,10 +242,14 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
       quantidadeMaxima: int.parse(_tQuantidadeMaxima.text),
       valor: _tValor.numberValue,
       validade: _tValidade.text,
-      imagem: produto.imagem,
+      imagem: _urlFoto,
     );
 
-    final response = await ProdutoService.updateProduto(p);
+    final response = await ProdutoService.updateProduto(p, file: _file);
+
+    setState(() {
+      _showProgress = false;
+    });
 
     if (response.ok) {
       alert(context, response.msg, callback: () {

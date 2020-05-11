@@ -37,10 +37,12 @@ class AppTextDatePiker extends StatelessWidget {
       ),
       onShowPicker: (context, currentValue) {
         return showDatePicker(
-            context: context,
-            firstDate: DateTime(1900),
-            initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime(2100));
+          context: context,
+          firstDate: DateTime(2020),
+          initialDate: currentValue ?? DateTime.now(),
+          lastDate: DateTime(2100),
+          locale: Locale('pt', 'BR'),
+        );
       },
     );
   }

@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estoque_facil/controllers/produto_model.dart';
+import 'package:estoque_facil/models/api_response.dart';
 import 'package:estoque_facil/models/produto.dart';
 import 'package:estoque_facil/pages/produto_form.dart';
 import 'package:estoque_facil/pages/produto_page.dart';
+import 'package:estoque_facil/services/produto_service.dart';
+import 'package:estoque_facil/utils/alert.dart';
 import 'package:estoque_facil/utils/nav.dart';
 import 'package:estoque_facil/widgets/app_text.dart';
 import 'package:estoque_facil/widgets/drawer_list.dart';
@@ -10,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,6 +22,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _model = ProdutoModel();
+
+  String _codigo = null;
+
+  final _formKey = GlobalKey<FormState>();
+
+  final _tQuantidade = TextEditingController();
 
   @override
   void initState() {
@@ -48,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       body: _body(),
       drawer: DrawerList(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _darBaixa,
+        onPressed: _scanCode,
         label: Text("Ler Código"),
         icon: Icon(Icons.chrome_reader_mode),
       ),
@@ -139,6 +149,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _scanCode() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+
+      setState(() => this._codigo = barcode);
+
+      return _darBaixa();
+    } catch (e) {
+      setState(() => this._codigo = null);
+    }
+  }
+
   _darBaixa() {
     return showDialog(
       context: context,
@@ -151,30 +173,46 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 Image.asset("assets/images/logo_estoque.png", height: 50),
                 SizedBox(height: 20),
-                Text("Cod: 372648271"),
+                Text("Código: $_codigo"),
               ],
             ),
-            content: AppText(
-              "Quantidade",
-              "Digite a quantidade",
-              icon: Icon(Icons.confirmation_number),
-              keyboardType: TextInputType.number,
+            content: Form(
+              key: _formKey,
+              child: AppText(
+                "Quantidade",
+                "Digite a quantidade",
+                icon: Icon(Icons.confirmation_number),
+                keyboardType: TextInputType.number,
+                controller: _tQuantidade,
+                validator: _validateQuantidade,
+              ),
             ),
             actions: <Widget>[
               FlatButton(
                 child: Text("Cancelar"),
                 onPressed: () {
                   Navigator.pop(context);
-
-                  print("cancelar");
                 },
               ),
               FlatButton(
                 child: Text("Dar baixa"),
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  bool formOk = _formKey.currentState.validate();
 
-                  print("Dar baixa");
+                  if (!formOk) {
+                    return;
+                  }
+
+                  ApiResponse response =
+                      await ProdutoService.getByCodigo(_codigo);
+
+                  if (response.ok) {
+                    Produto produto = response.result;
+                    _updateQuantidade(produto);
+                  } else {
+                    Navigator.pop(context);
+                    alert(context, response.msg);
+                  }
                 },
               ),
             ],
@@ -182,6 +220,36 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  _updateQuantidade(Produto produto) async {
+    int qtdFinal = produto.quantidade - int.parse(_tQuantidade.text);
+
+    if(qtdFinal >= 0) {
+      produto.quantidade = qtdFinal;
+
+      final response = await ProdutoService.updateProduto(produto);
+
+      if (response.ok) {
+        Navigator.pop(context);
+        alert(context, response.msg, callback: () {
+          _model.fetch();
+        });
+      } else {
+        Navigator.pop(context);
+        alert(context, response.msg);
+      }
+    } else {
+      alert(context, "A quantidade digitada ultrapassa a quantidade do produto no estoque.");
+    }
+  }
+
+  String _validateQuantidade(String text) {
+    if (text.isEmpty) {
+      return "Digite a quantidade";
+    }
+
+    return null;
   }
 
   _img(String img) {
