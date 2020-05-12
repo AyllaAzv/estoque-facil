@@ -15,9 +15,27 @@ abstract class ProdutoModelBase with Store {
   Exception error;
 
   @action
-  fetch() async {
+  getProdutos() async {
     try {
       this.produtos = await ProdutoService.getProdutos();
+    } catch(e) {
+      this.error = e;
+    }
+  }
+
+  @action
+  getProdutosDisponivel() async {
+    try {
+      this.produtos = await ProdutoService.getProdutosDisponivel();
+    } catch(e) {
+      this.error = e;
+    }
+  }
+
+  @action
+  getProdutosSemEstoque() async {
+    try {
+      this.produtos = await ProdutoService.getProdutosSemEstoque();
     } catch(e) {
       this.error = e;
     }

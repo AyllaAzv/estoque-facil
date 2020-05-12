@@ -3,7 +3,7 @@ import 'package:estoque_facil/controllers/produto_model.dart';
 import 'package:estoque_facil/models/api_response.dart';
 import 'package:estoque_facil/models/produto.dart';
 import 'package:estoque_facil/pages/home_page.dart';
-import 'package:estoque_facil/pages/produto_form.dart';
+import 'package:estoque_facil/pages/produto_form_page.dart';
 import 'package:estoque_facil/services/produto_service.dart';
 import 'package:estoque_facil/utils/alert.dart';
 import 'package:flutter/material.dart';

@@ -43,11 +43,29 @@ mixin _$ProdutoModel on ProdutoModelBase, Store {
     }, _$errorAtom, name: '${_$errorAtom.name}_set');
   }
 
-  final _$fetchAsyncAction = AsyncAction('fetch');
+  final _$getProdutosAsyncAction = AsyncAction('getProdutos');
 
   @override
-  Future fetch() {
-    return _$fetchAsyncAction.run(() => super.fetch());
+  Future getProdutos() {
+    return _$getProdutosAsyncAction.run(() => super.getProdutos());
+  }
+
+  final _$getProdutosDisponivelAsyncAction =
+      AsyncAction('getProdutosDisponivel');
+
+  @override
+  Future getProdutosDisponivel() {
+    return _$getProdutosDisponivelAsyncAction
+        .run(() => super.getProdutosDisponivel());
+  }
+
+  final _$getProdutosSemEstoqueAsyncAction =
+      AsyncAction('getProdutosSemEstoque');
+
+  @override
+  Future getProdutosSemEstoque() {
+    return _$getProdutosSemEstoqueAsyncAction
+        .run(() => super.getProdutosSemEstoque());
   }
 
   @override

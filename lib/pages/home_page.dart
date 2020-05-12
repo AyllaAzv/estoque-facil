@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estoque_facil/controllers/produto_model.dart';
 import 'package:estoque_facil/models/api_response.dart';
 import 'package:estoque_facil/models/produto.dart';
-import 'package:estoque_facil/pages/produto_form.dart';
+import 'package:estoque_facil/pages/produto_form_page.dart';
 import 'package:estoque_facil/pages/produto_page.dart';
 import 'package:estoque_facil/services/produto_service.dart';
 import 'package:estoque_facil/utils/alert.dart';
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _model.fetch();
+    _model.getProdutos();
   }
 
   @override
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
       if (response.ok) {
         Navigator.pop(context);
         alert(context, response.msg, callback: () {
-          _model.fetch();
+          _model.getProdutos();
         });
       } else {
         Navigator.pop(context);
@@ -330,6 +330,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _onRefresh() {
-    return _model.fetch();
+    return _model.getProdutos();
   }
 }

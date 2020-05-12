@@ -23,6 +23,36 @@ class ProdutoService {
     return produtos;
   }
 
+  static Future<List<Produto>> getProdutosSemEstoque() async {
+    var url = "$BASE_URL/produtosSemEstoque";
+
+    var response = await get(url);
+
+    String json = response.body;
+
+    List list = convert.json.decode(json);
+
+    List<Produto> produtos =
+    list.map<Produto>((map) => Produto.fromMap(map)).toList();
+
+    return produtos;
+  }
+
+  static Future<List<Produto>> getProdutosDisponivel() async {
+    var url = "$BASE_URL/produtosDisponivel";
+
+    var response = await get(url);
+
+    String json = response.body;
+
+    List list = convert.json.decode(json);
+
+    List<Produto> produtos =
+    list.map<Produto>((map) => Produto.fromMap(map)).toList();
+
+    return produtos;
+  }
+
   static Future<ApiResponse<Produto>> getByCodigo(String codigo) async {
     try {
       var url = '$BASE_URL/produto/$codigo';

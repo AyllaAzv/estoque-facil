@@ -253,7 +253,7 @@ class _ProdutoFormPageState extends State<ProdutoFormPage> {
 
     if (response.ok) {
       alert(context, response.msg, callback: () {
-        push(context, HomePage(), replace: true);
+        pop(context);
       });
     } else {
       alert(context, response.msg);

@@ -1,4 +1,6 @@
-import 'package:estoque_facil/pages/produto_form.dart';
+import 'package:estoque_facil/pages/produto_disponivel_page.dart';
+import 'package:estoque_facil/pages/produto_form_page.dart';
+import 'package:estoque_facil/pages/produto_sem_estoque_page.dart';
 import 'package:estoque_facil/utils/nav.dart';
 import 'package:estoque_facil/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,7 @@ class _ProdutosPageState extends State<ProdutosPage>
   void initState() {
     super.initState();
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -40,19 +42,13 @@ class _ProdutosPageState extends State<ProdutosPage>
             Tab(
               child: Text(
                 "Disponível",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Tab(
-              child: Text(
-                "Acabando",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.green),
               ),
             ),
             Tab(
               child: Text(
                 "Sem estoque",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.red),
               ),
             ),
           ],
@@ -73,9 +69,8 @@ class _ProdutosPageState extends State<ProdutosPage>
     return TabBarView(
       controller: _tabController,
       children: <Widget>[
-        Container(),
-        Container(),
-        Container(),
+        ProdutoDisponivelPage(),
+        ProdutoSemEstoquePage(),
       ],
     );
   }
